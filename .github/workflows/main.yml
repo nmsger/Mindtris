@@ -1,10 +1,9 @@
 name: CI
 
 on:
-  workflow_dispatch:
-    push:
-      branches:
-        - main
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -20,7 +19,7 @@ jobs:
       - name: Download Dependencies
         run: flutter pub get
       - name: Build
-        run: flutter build web --release
+        run: flutter build web --base-href "/Mindtris/" --release
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
