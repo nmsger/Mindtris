@@ -5,6 +5,7 @@ import 'package:mindtris/game/widget/board_widget.dart';
 import 'package:mindtris/game/widget/shape_widget.dart';
 
 import 'model/shape.dart';
+import 'view_model/board_view_model.dart';
 import 'widget/draggable_shape_widget.dart';
 
 class GameScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   final double cellSize = BoardCfg.boardCellSize;
+  final BoardViewModel boardViewModel = BoardViewModel(boardSize: BoardCfg.boardSize, cellSize: BoardCfg.boardCellSize);
 
   final List<Shape> shapes = [
     Shape(
@@ -63,7 +65,7 @@ class _GameScreenState extends State<GameScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
-            child: BoardWidget(),
+            child: BoardWidget(viewModel: boardViewModel),
           ),
           Container(
             height: 220,

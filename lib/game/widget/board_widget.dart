@@ -1,156 +1,83 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:mindtris/game/view_model/board_view_model.dart';
 
-import '../../config/constants.dart';
 import '../model/shape.dart';
 import '../painter/grid_painter.dart';
 import 'shape_widget.dart';
 
-class BoardWidget extends StatefulWidget {
+class BoardWidget extends StatelessWidget {
+  final BoardViewModel viewModel;
 
-  const BoardWidget({super.key});
-
-  @override
-  State<BoardWidget> createState() => _BoardWidgetState();
-}
-
-class _BoardWidgetState extends State<BoardWidget> {
-  final int boardSize = BoardCfg.boardSize;
-  final double cellSize = BoardCfg.boardCellSize;
-  int? hoverX;
-  int? hoverY;
-  Shape? hoverShape;
-
-  Offset? initialDragOffset;
-  Offset? initialDragPosition;
-
-  final List<PlacedShape> placedShapes = [PlacedShape(
-      shape: Shape(
-        type: ShapeType.I,
-        color: Colors.green,
-        blocks: [Point(0, 1), Point(1, 1), Point(2, 1), Point(0, 0), Point(1, 2)]
-      ),
-      x: 0,
-      y: 0),
-    PlacedShape(shape: Shape(
-        type: ShapeType.T,
-        color: Colors.pink,
-        blocks: [Point(0, 0), Point(1, 0), Point(1, 1), Point(2, 1)],
-      ), x: 2, y: 0)
-  ];
+  const BoardWidget({super.key, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _drawGrid(),
-        // draw placedShapes
-        ...placedShapes.map((shape) => Positioned(
-            left: shape.x * cellSize,
-            top: shape.y * cellSize,
-            child: ShapeWidget(shape: shape.shape, cellSize: cellSize)
-          )
-        ),
-        if (hoverShape != null && hoverX != null && hoverY != null)
-          Positioned(
-            left: hoverX! * cellSize,
-            top: hoverY! * cellSize,
-            child: ShapeWidget(
-              shape: hoverShape!,
-              cellSize: cellSize,
-              opacity: 0.6,
+    return ListenableBuilder(
+      listenable: viewModel,
+      builder: (BuildContext context, Widget? child) {
+        return Stack(
+          children: [
+            _drawGrid(),
+            // draw placedShapes
+            ...viewModel.placedShapes.map((shape) => Positioned(
+                left: shape.x * viewModel.cellSize,
+                top: shape.y * viewModel.cellSize,
+                child: ShapeWidget(shape: shape.shape, cellSize: viewModel.cellSize)
+            )
             ),
-          ),
-        _drawDragTargetArea(),
-      ],
+            if (viewModel.hoverShape != null && viewModel.hoverX != null && viewModel.hoverY != null)
+              Positioned(
+                left: viewModel.hoverX! * viewModel.cellSize,
+                top: viewModel.hoverY! * viewModel.cellSize,
+                child: ShapeWidget(
+                  shape: viewModel.hoverShape!,
+                  cellSize: viewModel.cellSize,
+                  opacity: 0.6,
+                ),
+              ),
+            _drawDragTargetArea(),
+          ],
+        );
+      },
     );
   }
 
   Widget _drawGrid() {
     return  Container(
-      width: boardSize * cellSize,
-      height: boardSize * cellSize,
+      width: viewModel.boardSize * viewModel.cellSize,
+      height: viewModel.boardSize * viewModel.cellSize,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         color: Colors.black.withValues(alpha: 0.1),
       ),
       child: CustomPaint(
-        painter: GridPainter(cellSize: cellSize),
+        painter: GridPainter(cellSize: viewModel.cellSize),
       ),
     );
   }
 
   Widget _drawDragTargetArea() {
     return  Positioned(
-      width: boardSize * cellSize,
-      height: boardSize * cellSize,
-      child: DragTarget<Shape>(
-        builder: (context, candidateData, rejectedData) {
-          return Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.transparent,
-          );
-        },
-        onAcceptWithDetails: (details) {
-          if (hoverX != null && hoverY != null) {
-            setState(() {
-              placeShape(details.data, hoverX!, hoverY!);
-              hoverShape = null;
-              hoverX = null;
-              hoverY = null;
-            }
+      width: viewModel.boardSize * viewModel.cellSize,
+      height: viewModel.boardSize * viewModel.cellSize,
+      child: Builder(
+        builder: (context) => DragTarget<Shape>(
+          builder: (_, candidateData, rejectedData) {
+            return Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.transparent,
             );
-          }
-        },
-        onLeave: (_) {
-          setState(() {
-            hoverShape = null;
-            hoverX = null;
-            hoverY = null;
-          }
-          );
-        },
-        onMove: (details) {
-          print("onMove");
-          final RenderBox box = context.findRenderObject() as RenderBox;
-          final gridPosition = box.localToGlobal(Offset(0, 0));
-          final relativeOffset = details.offset - gridPosition;
-
-          // No adjustment to the dragAnchor here - we'll handle that in the grid calculation
-
-          // Calculate grid position, taking into account the cell size and potentially the shape's dimensions
-          final int rawGridX = (relativeOffset.dx / cellSize).floor();
-          final int rawGridY = (relativeOffset.dy / cellSize).floor();
-
-
-          print("$rawGridX, $rawGridY");
-
-          if (rawGridX >= 0 && rawGridX < boardSize && rawGridY >= 0 && rawGridY < boardSize) {
-            setState(() {
-              hoverShape = details.data;
-              hoverX = rawGridX;
-              hoverY = rawGridY;
-            });
-          }
-          else {
-            setState(() {
-              hoverShape = null;
-              hoverX = null;
-              hoverY = null;
-            });
-          }
-        },
-      ),
+          },
+          onAcceptWithDetails: (details) =>
+          viewModel.onDragAcceptWithDetails(details),
+          onLeave: (_) => viewModel.onDragLeave(),
+          onMove: (details) => viewModel.onDragMove(context, details),
+        ),
+      )
     );
   }
 
-  void placeShape(Shape shape, int gridX, int gridY) {
-    placedShapes.add(PlacedShape(
-        shape: shape.copyWith(),
-        x: gridX,
-        y: gridY
-    ));
-  }
 }
