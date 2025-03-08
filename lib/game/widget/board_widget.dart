@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 
+import '../../config/constants.dart';
 import '../model/shape.dart';
+import '../painter/grid_painter.dart';
 import 'shape_widget.dart';
 
 class BoardWidget extends StatefulWidget {
@@ -14,9 +16,8 @@ class BoardWidget extends StatefulWidget {
 }
 
 class _BoardWidgetState extends State<BoardWidget> {
-  final int gridWidth = 9;
-  final int gridHeight = 9;
-  final double cellSize = 30.0;
+  final int boardSize = BoardCfg.boardSize;
+  final double cellSize = BoardCfg.boardCellSize;
   int? hoverX;
   int? hoverY;
   Shape? hoverShape;
@@ -68,8 +69,8 @@ class _BoardWidgetState extends State<BoardWidget> {
 
   Widget _drawGrid() {
     return  Container(
-      width: gridWidth * cellSize,
-      height: gridHeight * cellSize,
+      width: boardSize * cellSize,
+      height: boardSize * cellSize,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         color: Colors.black.withValues(alpha: 0.1),
@@ -82,8 +83,8 @@ class _BoardWidgetState extends State<BoardWidget> {
 
   Widget _drawDragTargetArea() {
     return  Positioned(
-      width: gridWidth * cellSize,
-      height: gridHeight * cellSize,
+      width: boardSize * cellSize,
+      height: boardSize * cellSize,
       child: DragTarget<Shape>(
         builder: (context, candidateData, rejectedData) {
           return Container(
@@ -126,7 +127,7 @@ class _BoardWidgetState extends State<BoardWidget> {
 
           print("$rawGridX, $rawGridY");
 
-          if (rawGridX >= 0 && rawGridX < gridWidth && rawGridY >= 0 && rawGridY < gridHeight) {
+          if (rawGridX >= 0 && rawGridX < boardSize && rawGridY >= 0 && rawGridY < boardSize) {
             setState(() {
               hoverShape = details.data;
               hoverX = rawGridX;
@@ -146,46 +147,10 @@ class _BoardWidgetState extends State<BoardWidget> {
   }
 
   void placeShape(Shape shape, int gridX, int gridY) {
-    // Mark cells as occupied
-    // Add to placed shapes
     placedShapes.add(PlacedShape(
         shape: shape.copyWith(),
         x: gridX,
         y: gridY
     ));
   }
-}
-
-class GridPainter extends CustomPainter {
-  final double cellSize;
-
-  GridPainter({required this.cellSize});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.grey
-      ..strokeWidth = 0.5;
-
-    // Draw vertical lines
-    for (int i = 0; i <= size.width / cellSize; i++) {
-      canvas.drawLine(
-        Offset(i * cellSize, 0),
-        Offset(i * cellSize, size.height),
-        paint
-      );
-    }
-
-    // Draw horizontal lines
-    for (int i = 0; i <= size.height / cellSize; i++) {
-      canvas.drawLine(
-        Offset(0, i * cellSize),
-        Offset(size.width, i * cellSize),
-        paint
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
