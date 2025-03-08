@@ -7,7 +7,6 @@ import '../model/Shape.dart';
 class ShapeWidget extends StatelessWidget {
   final Shape shape;
   final double cellSize;
-  final double opacity;
   final bool isValid;
   final Function(Shape) onRotate;
 
@@ -15,10 +14,13 @@ class ShapeWidget extends StatelessWidget {
     super.key,
     required this.shape,
     required this.cellSize,
-    this.opacity = 1.0,
     this.isValid = true,
     required this.onRotate,
   });
+
+  void _handleTap() {
+    onRotate(shape.rotate());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,33 +32,38 @@ class ShapeWidget extends StatelessWidget {
       if (block.y > maxY) maxY = block.y;
     }
 
-    return GestureDetector(
-      onTap: _handleTap,
-      child:  Container(
-        decoration: BoxDecoration(
-          // transparent border necessary to increase GestureDetector range
-          border: Border.all(color: Colors.transparent),
-        ),
-        child: Opacity(
-          opacity: opacity,
-          child: SizedBox(
-            width: (maxX + 1) * cellSize,
-            height: (maxY + 1) * cellSize,
-            child: Center(
-              child: Stack(
-                children: shape.blocks
-                    .map((block) => _buildShapeBlock(block))
-                    .toList(),
-              ),
+    return Draggable<Shape>(
+      data: shape,
+      feedback:  _buildShapeContainer(shape, 0.7, maxX, maxY),
+      childWhenDragging: _buildShapeContainer(shape, 0.3, maxX, maxY),
+      child: GestureDetector(
+        onTap: _handleTap,
+        child:  _buildShapeContainer(shape, 1.0, maxX, maxY)
+      ),
+    );
+  }
+
+  Widget _buildShapeContainer(Shape shape, double opacity, int maxX, int maxY) {
+    return  Container(
+      decoration: BoxDecoration(
+        // transparent border necessary to increase GestureDetector range
+        border: Border.all(color: Colors.transparent),
+      ),
+      child: Opacity(
+        opacity: opacity,
+        child: SizedBox(
+          width: (maxX + 1) * cellSize,
+          height: (maxY + 1) * cellSize,
+          child: Center(
+            child: Stack(
+              children: shape.blocks
+                  .map((block) => _buildShapeBlock(block))
+                  .toList(),
             ),
           ),
         ),
       ),
     );
-  }
-
-  void _handleTap() {
-    onRotate(shape.rotate());
   }
 
   Widget _buildShapeBlock(Point block) {
