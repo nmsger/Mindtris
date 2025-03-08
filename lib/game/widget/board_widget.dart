@@ -1,10 +1,10 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:mindtris/game/view_model/board_view_model.dart';
 
 import '../model/shape.dart';
 import '../painter/grid_painter.dart';
+import '../view_model/board_view_model.dart';
 import 'shape_widget.dart';
 
 class BoardWidget extends StatelessWidget {
@@ -21,22 +21,15 @@ class BoardWidget extends StatelessWidget {
           children: [
             _drawGrid(),
             // draw placedShapes
-            ...viewModel.placedShapes.map((shape) => Positioned(
-                left: shape.x * viewModel.cellSize,
-                top: shape.y * viewModel.cellSize,
+            ...viewModel.getPlacedShapes().map((shape) => Positioned(
+                left: shape.point.x * viewModel.cellSize,
+                top: shape.point.y * viewModel.cellSize,
                 child: ShapeWidget(shape: shape.shape, cellSize: viewModel.cellSize)
             )
             ),
-            if (viewModel.hoverShape != null && viewModel.hoverX != null && viewModel.hoverY != null)
-              Positioned(
-                left: viewModel.hoverX! * viewModel.cellSize,
-                top: viewModel.hoverY! * viewModel.cellSize,
-                child: ShapeWidget(
-                  shape: viewModel.hoverShape!,
-                  cellSize: viewModel.cellSize,
-                  opacity: 0.6,
-                ),
-              ),
+            // draw shape preview
+            if (viewModel.preview != null)
+              _drawPreviewShape(),
             _drawDragTargetArea(),
           ],
         );
@@ -77,6 +70,19 @@ class BoardWidget extends StatelessWidget {
           onMove: (details) => viewModel.onDragMove(context, details),
         ),
       )
+    );
+  }
+
+  Widget _drawPreviewShape() {
+    return  Positioned(
+      left: viewModel.preview!.point.x * viewModel.cellSize,
+      top: viewModel.preview!.point.y * viewModel.cellSize,
+      child: ShapeWidget(
+        shape: viewModel.preview!.shape,
+        cellSize: viewModel.cellSize,
+        isValid: viewModel.canPlaceShape(),
+        opacity: 0.6,
+      ),
     );
   }
 

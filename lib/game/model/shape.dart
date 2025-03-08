@@ -62,15 +62,26 @@ class Shape {
   }
 }
 
-class PlacedShape {
+class ShapePreview {
   final Shape shape;
-  final int x;
-  final int y;
+  final Point point;
 
-  PlacedShape({required this.shape, required this.x, required this.y});
+  ShapePreview({required this.shape, required this.point});
 
   @override
   String toString() {
-    return "PlacedShape<${shape.type} ($x, $y)>";
+    return "ShapePreview<$shape $point";
+  }
+}
+
+class PlacedShape {
+  final Shape shape;
+  final Point point;
+
+  PlacedShape({required this.shape, required this.point});
+
+  @override
+  String toString() {
+    return "PlacedShape<${shape.type} $point>";
   }
 }

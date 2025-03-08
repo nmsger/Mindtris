@@ -1,40 +1,34 @@
 
 import 'package:flutter/material.dart';
+
+import '../../main.dart';
 import '../model/shape.dart';
+import '../repository/board_repository.dart';
 
 class BoardViewModel extends ChangeNotifier {
   final int boardSize;
   final double cellSize;
-  int? hoverX;
-  int? hoverY;
-  Shape? hoverShape;
+  ShapePreview? preview;
+  late BoardRepository boardRepository;
 
-  Offset? initialDragOffset;
-  Offset? initialDragPosition;
-
-  final List<PlacedShape> placedShapes = [];
-
-  BoardViewModel({required this.boardSize, required this.cellSize});
+  BoardViewModel({
+    required this.boardSize,
+    required this.cellSize,
+    BoardRepository? boardRepository}) {
+    this.boardRepository = boardRepository ?? getIt.get<BoardRepository>();
+  }
 
   void onDragAcceptWithDetails(DragTargetDetails<Shape> details) {
-    if (hoverX == null || hoverY == null) {
+    if (preview == null) {
       return;
     }
-    placedShapes.add(PlacedShape(
-        shape: hoverShape!.copyWith(),
-        x: hoverX!,
-        y: hoverY!
-    ));
-    hoverY = null;
-    hoverX = null;
-    hoverShape = null;
+    boardRepository.placeShape(preview!.shape, preview!.point);
+    _resetPreview();
     notifyListeners();
   }
 
   void onDragLeave() {
-    hoverY = null;
-    hoverX = null;
-    hoverShape = null;
+    _resetPreview();
     notifyListeners();
   }
 
@@ -43,27 +37,26 @@ class BoardViewModel extends ChangeNotifier {
     final gridPosition = box.localToGlobal(Offset(0, 0));
     final relativeOffset = details.offset - gridPosition;
 
-    // No adjustment to the dragAnchor here - we'll handle that in the grid calculation
-
-    // Calculate grid position, taking into account the cell size and potentially the shape's dimensions
     final int rawGridX = (relativeOffset.dx / cellSize).floor();
     final int rawGridY = (relativeOffset.dy / cellSize).floor();
 
-
-    print("$rawGridX, $rawGridY");
-
+    _resetPreview();
     if (rawGridX >= 0 && rawGridX < boardSize && rawGridY >= 0 && rawGridY < boardSize) {
-        hoverShape = details.data;
-        hoverX = rawGridX;
-        hoverY = rawGridY;
-
-    }
-    else {
-        hoverShape = null;
-        hoverX = null;
-        hoverY = null;
-
+      preview = ShapePreview(shape: details.data, point: Point(rawGridX, rawGridY));
     }
     notifyListeners();
+  }
+
+  bool canPlaceShape() {
+    if (preview == null) {
+      return false;
+    }
+    return boardRepository.canPlaceShape(preview!.shape, preview!.point);
+  }
+
+  List<PlacedShape> getPlacedShapes() => boardRepository.placedShapes;
+
+  void _resetPreview() {
+    preview = null;
   }
 }
