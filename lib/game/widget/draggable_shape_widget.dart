@@ -2,15 +2,16 @@
 
 import 'package:flutter/material.dart';
 
-import '../model/Shape.dart';
+import '../model/shape.dart';
+import 'shape_widget.dart';
 
-class ShapeWidget extends StatelessWidget {
+class DraggableShapeWidget extends StatelessWidget {
   final Shape shape;
   final double cellSize;
   final bool isValid;
   final Function(Shape) onRotate;
 
-  const ShapeWidget({
+  const DraggableShapeWidget({
     super.key,
     required this.shape,
     required this.cellSize,
@@ -19,6 +20,7 @@ class ShapeWidget extends StatelessWidget {
   });
 
   void _handleTap() {
+    print("_handleTap");
     onRotate(shape.rotate());
   }
 
@@ -34,37 +36,17 @@ class ShapeWidget extends StatelessWidget {
 
     return Draggable<Shape>(
       data: shape,
-      feedback:  _buildShapeContainer(shape, 0.7, maxX, maxY),
-      childWhenDragging: _buildShapeContainer(shape, 0.3, maxX, maxY),
+      feedback: ShapeWidget(shape: shape, cellSize: cellSize, opacity: 0.7),
+      dragAnchorStrategy: (Draggable<Object> draggable, BuildContext context, Offset position) => Offset(50, 50),
+      // dragAnchorStrategy: pointerDragAnchorStrategy,
+      childWhenDragging: ShapeWidget(shape: shape, cellSize: cellSize, opacity: 0.3),
       child: GestureDetector(
-        onTap: _handleTap,
-        child:  _buildShapeContainer(shape, 1.0, maxX, maxY)
+          onTap: _handleTap,
+          child:  ShapeWidget(shape: shape, cellSize: cellSize, opacity: 1.0),
       ),
     );
   }
 
-  Widget _buildShapeContainer(Shape shape, double opacity, int maxX, int maxY) {
-    return  Container(
-      decoration: BoxDecoration(
-        // transparent border necessary to increase GestureDetector range
-        border: Border.all(color: Colors.transparent),
-      ),
-      child: Opacity(
-        opacity: opacity,
-        child: SizedBox(
-          width: (maxX + 1) * cellSize,
-          height: (maxY + 1) * cellSize,
-          child: Center(
-            child: Stack(
-              children: shape.blocks
-                  .map((block) => _buildShapeBlock(block))
-                  .toList(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildShapeBlock(Point block) {
     return Positioned(
@@ -76,7 +58,7 @@ class ShapeWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: isValid
               ? shape.color
-              : Colors.red.withOpacity(0.7),
+              : Colors.red.withValues(alpha: 0.7),
           border: Border.all(
             color: isValid
                 ? Colors.white

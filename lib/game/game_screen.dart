@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
-import 'package:mindtris/game/widget/ShapeWidget.dart';
+import 'package:mindtris/game/widget/board_widget.dart';
+import 'package:mindtris/game/widget/shape_widget.dart';
 
-import 'model/Shape.dart';
+import 'model/shape.dart';
+import 'widget/draggable_shape_widget.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -22,9 +24,9 @@ class _GameScreenState extends State<GameScreen> {
       blocks: [Point(0, 1), Point(1, 1), Point(2, 1), Point(0, 0), Point(1, 2)]
     ),
     Shape(
-        type: ShapeType.T,
-        color: Colors.pink,
-        blocks: [Point(0, 0), Point(1, 0), Point(1, 1), Point(2, 1)],
+      type: ShapeType.T,
+      color: Colors.pink,
+      blocks: [Point(0, 0), Point(1, 0), Point(1, 1), Point(2, 1)],
     ),
     Shape(
       type: ShapeType.T,
@@ -45,10 +47,11 @@ class _GameScreenState extends State<GameScreen> {
 
   void _handleShapeRotation(int index, Shape rotatedShape) {
     setState(() {
-      shapes[index] = rotatedShape;
-    });
+        shapes[index] = rotatedShape;
+      }
+    );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,39 +60,44 @@ class _GameScreenState extends State<GameScreen> {
       ),
       body: Column(
         children: [
-         Container(
-           height: 220,
-           width: 400,
-           color: Colors.grey[200],
-           padding: const EdgeInsets.symmetric(vertical: 20),
-           child: SingleChildScrollView(
-             scrollDirection: Axis.horizontal,
-             child: Row(
-               mainAxisAlignment: MainAxisAlignment.spaceAround,
-               children: List.generate(shapes.length, (index) {
-                 return Padding(
-                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                   child: Container(
-                     decoration: BoxDecoration(
-                       border: Border.all(color: Colors.black),
-                     ),
-                     child: SizedBox(
-                       width: 140,
-                       height: 140,
-                       child: Center(
-                         child: ShapeWidget(
-                           shape: shapes[index],
-                           cellSize: cellSize,
-                           onRotate: (rotatedShape) => _handleShapeRotation(index, rotatedShape),
-                         ),
-                       ),
-                     ),
-                   ),
-                 );
-               }),
-             )
-           )
-         )
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: BoardWidget(),
+          ),
+          Container(
+            height: 220,
+            width: 400,
+            color: Colors.grey[200],
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(shapes.length, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                        ),
+                        child: SizedBox(
+                          width: 140,
+                          height: 140,
+                          child: Center(
+                            child: DraggableShapeWidget(
+                              shape: shapes[index],
+                              cellSize: cellSize,
+                              onRotate: (rotatedShape) => _handleShapeRotation(index, rotatedShape),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                ),
+              )
+            )
+          )
         ],
       )
     );

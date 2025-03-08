@@ -61,3 +61,16 @@ class Shape {
     );
   }
 }
+
+class PlacedShape {
+  final Shape shape;
+  final int x;
+  final int y;
+
+  PlacedShape({required this.shape, required this.x, required this.y});
+
+  @override
+  String toString() {
+    return "PlacedShape<${shape.type} ($x, $y)>";
+  }
+}
