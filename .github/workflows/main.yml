@@ -16,7 +16,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version-file: pubspec.yaml
+          flutter-version: 3.27.4
       - name: Download Dependencies
         run: flutter pub get
       - name: Build
