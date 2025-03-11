@@ -5,9 +5,8 @@ import '../model/board.dart';
 
 class GridPainter extends CustomPainter {
   final double cellSize;
-  final List<Section> sections;
 
-  GridPainter({required this.cellSize, required this.sections});
+  GridPainter({required this.cellSize});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -32,7 +31,22 @@ class GridPainter extends CustomPainter {
           paint
       );
     }
+  }
 
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// ToDo - Refactor Section (in terms of start/end points)
+// ToDo - Fix drawing bug (bottom/right side disappear when shape touches it)
+class SectionPainter extends CustomPainter {
+  final double cellSize;
+  final List<Section> sections;
+
+  SectionPainter({required this.cellSize, required this.sections});
+
+  @override
+  void paint(Canvas canvas, Size size) {
     Paint gridLineThick = Paint()
       ..color = Colors.black38
       ..style = PaintingStyle.stroke

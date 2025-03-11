@@ -25,13 +25,15 @@ class BoardWidget extends StatelessWidget {
                 left: shape.point.x * viewModel.cellSize,
                 top: shape.point.y * viewModel.cellSize,
                 child: ShapeWidget(shape: shape.shape, cellSize: viewModel.cellSize,)
-            )
+              )
             ),
+            _drawGridSections(),
             // draw shape preview
             if (viewModel.preview != null)
-              _drawPreviewShape(),
+            _drawPreviewShape(),
             _drawDragTargetArea(),
           ],
+
         );
       },
     );
@@ -46,7 +48,21 @@ class BoardWidget extends StatelessWidget {
         color: Colors.black.withValues(alpha: 0.1),
       ),
       child: CustomPaint(
-        painter: GridPainter(cellSize: viewModel.cellSize, sections: viewModel.boardSections),
+        painter: GridPainter(cellSize: viewModel.cellSize),
+      ),
+    );
+  }
+
+  Widget _drawGridSections() {
+    return  Container(
+      width: viewModel.boardSize * viewModel.cellSize,
+      height: viewModel.boardSize * viewModel.cellSize,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.transparent),
+        color: Colors.transparent,
+      ),
+      child: CustomPaint(
+        painter: SectionPainter(cellSize: viewModel.cellSize, sections: viewModel.boardSections),
       ),
     );
   }
