@@ -6,17 +6,16 @@ import '../model/shape.dart';
 import '../repository/board_repository.dart';
 
 class BoardViewModel extends ChangeNotifier {
-  final int boardSize;
-  final double cellSize;
   ShapePreview? preview;
   late BoardRepository boardRepository;
 
   BoardViewModel({
-    required this.boardSize,
-    required this.cellSize,
     BoardRepository? boardRepository}) {
     this.boardRepository = boardRepository ?? getIt.get<BoardRepository>();
   }
+
+  int get boardSize => boardRepository.boardSize;
+  double get cellSize => boardRepository.cellSize;
 
   void onDragAcceptWithDetails(DragTargetDetails<Shape> details) {
     if (preview == null) {
@@ -33,16 +32,20 @@ class BoardViewModel extends ChangeNotifier {
   }
 
   onDragMove(BuildContext context, DragTargetDetails<Shape> details) {
+    print("cellSize $cellSize");
     final RenderBox box = context.findRenderObject() as RenderBox;
     final gridPosition = box.localToGlobal(Offset(0, 0));
     final relativeOffset = details.offset - gridPosition;
 
     final int rawGridX = (relativeOffset.dx / cellSize).floor();
     final int rawGridY = (relativeOffset.dy / cellSize).floor();
+    final Point gridPoint = Point(rawGridX, rawGridY);
 
     _resetPreview();
-    if (rawGridX >= 0 && rawGridX < boardSize && rawGridY >= 0 && rawGridY < boardSize) {
-      preview = ShapePreview(shape: details.data, point: Point(rawGridX, rawGridY));
+    print(boardRepository.isWithinGrid(gridPoint));
+    print(gridPoint);
+    if (boardRepository.isWithinGrid(gridPoint)) {
+      preview = ShapePreview(shape: details.data, point: gridPoint);
     }
     notifyListeners();
   }

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mindtris/config/constants.dart';
 import 'package:mindtris/game/repository/board_repository.dart';
 
 import 'game/game_screen.dart';
@@ -9,7 +10,7 @@ import 'game/game_screen.dart';
 final getIt = GetIt.instance;
 
 void setup() {
-  getIt.registerSingleton(BoardRepository());
+  getIt.registerSingleton(BoardRepository(boardSize: BoardCfg.boardSize, cellSize: BoardCfg.boardCellSize));
 }
 
 void main() {

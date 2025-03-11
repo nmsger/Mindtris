@@ -5,15 +5,22 @@ import '../model/shape.dart';
 
 
 class BoardRepository {
+  final int boardSize;
+  final double cellSize;
   final List<PlacedShape> placedShapes = [];
-  final List<List<Color>> boardGrid = List.generate(
-      9,
-          (_) => List.generate(9, (_) => Colors.transparent)
+  final List<List<Color>> boardGrid;
+
+  BoardRepository({
+    required this.boardSize,
+    required this.cellSize,
+  }) : boardGrid = List.generate(
+      boardSize,
+          (_) => List.generate(boardSize, (_) => Colors.transparent)
   );
 
-  bool _isWithinGrid(Point point) {
-    return point.x < 0 || point.x >= 9
-        || point.y < 0 || point.y >= 9;
+  bool isWithinGrid(Point point) {
+    return point.x >= 0 && point.x < boardSize
+        && point.y >= 0 && point.y < boardSize;
   }
 
   bool _isCellOccupied(Point point) {
@@ -36,7 +43,7 @@ class BoardRepository {
     List<Color> results = [];
     for (var (dy, dx) in directions) {
       Point gridPosition = Point(point.x + dx, point.y + dy);
-      if (_isWithinGrid(gridPosition)) {
+      if (!isWithinGrid(gridPosition)) {
         continue;
       }
       results.add(boardGrid[gridPosition.y][gridPosition.x]);
@@ -49,7 +56,7 @@ class BoardRepository {
     for (Point block in shape.blocks) {
       Point gridPosition = _getGridPosition(block, anchorPoint);
 
-      if (_isWithinGrid(gridPosition)) {
+      if (!isWithinGrid(gridPosition)) {
         return false;
       }
       if(_isCellOccupied(gridPosition)) {
@@ -62,7 +69,7 @@ class BoardRepository {
       }
 
       if (placedShapes.isNotEmpty &&
-          adjacentColors.any((color) => color != Colors.transparent)) {
+        adjacentColors.any((color) => color != Colors.transparent)) {
         hasAdjacentNeighbor = true;
       }
     }
@@ -76,7 +83,7 @@ class BoardRepository {
     if (!canPlaceShape(shape, anchorPoint)) {
       return;
     }
-    
+
     for (Point block in shape.blocks) {
       Point gridPosition = _getGridPosition(block, anchorPoint);
       boardGrid[gridPosition.y][gridPosition.x] = shape.color;

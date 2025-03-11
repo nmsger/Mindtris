@@ -17,7 +17,7 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   final double cellSize = BoardCfg.boardCellSize;
-  final BoardViewModel boardViewModel = BoardViewModel(boardSize: BoardCfg.boardSize, cellSize: BoardCfg.boardCellSize);
+  final BoardViewModel boardViewModel = BoardViewModel();
 
   final List<Shape> shapes = [
     Shape(
