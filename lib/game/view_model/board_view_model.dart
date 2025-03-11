@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import '../../main.dart';
+import '../model/board.dart';
 import '../model/shape.dart';
 import '../repository/board_repository.dart';
 
@@ -16,6 +17,7 @@ class BoardViewModel extends ChangeNotifier {
 
   int get boardSize => boardRepository.boardSize;
   double get cellSize => boardRepository.cellSize;
+  List<Section> get boardSections => boardRepository.boardType.sections;
 
   void onDragAcceptWithDetails(DragTargetDetails<Shape> details) {
     if (preview == null) {
@@ -32,7 +34,6 @@ class BoardViewModel extends ChangeNotifier {
   }
 
   onDragMove(BuildContext context, DragTargetDetails<Shape> details) {
-    print("cellSize $cellSize");
     final RenderBox box = context.findRenderObject() as RenderBox;
     final gridPosition = box.localToGlobal(Offset(0, 0));
     final relativeOffset = details.offset - gridPosition;
@@ -42,8 +43,6 @@ class BoardViewModel extends ChangeNotifier {
     final Point gridPoint = Point(rawGridX, rawGridY);
 
     _resetPreview();
-    print(boardRepository.isWithinGrid(gridPoint));
-    print(gridPoint);
     if (boardRepository.isWithinGrid(gridPoint)) {
       preview = ShapePreview(shape: details.data, point: gridPoint);
     }

@@ -1,14 +1,16 @@
 
 import 'package:flutter/material.dart';
 
+import '../model/board.dart';
 import '../model/shape.dart';
 
 
 class BoardRepository {
   final int boardSize;
   final double cellSize;
-  final List<PlacedShape> placedShapes = [];
   final List<List<Color>> boardGrid;
+  final List<PlacedShape> placedShapes = [];
+  final BoardType boardType = boardTypes[0];
 
   BoardRepository({
     required this.boardSize,

@@ -24,7 +24,7 @@ class BoardWidget extends StatelessWidget {
             ...viewModel.getPlacedShapes().map((shape) => Positioned(
                 left: shape.point.x * viewModel.cellSize,
                 top: shape.point.y * viewModel.cellSize,
-                child: ShapeWidget(shape: shape.shape, cellSize: viewModel.cellSize)
+                child: ShapeWidget(shape: shape.shape, cellSize: viewModel.cellSize,)
             )
             ),
             // draw shape preview
@@ -46,7 +46,7 @@ class BoardWidget extends StatelessWidget {
         color: Colors.black.withValues(alpha: 0.1),
       ),
       child: CustomPaint(
-        painter: GridPainter(cellSize: viewModel.cellSize),
+        painter: GridPainter(cellSize: viewModel.cellSize, sections: viewModel.boardSections),
       ),
     );
   }
