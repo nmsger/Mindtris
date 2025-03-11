@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:mindtris/config/constants.dart';
 import 'package:mindtris/game/widget/board_widget.dart';
-import 'package:mindtris/game/widget/shape_widget.dart';
 
 import 'model/shape.dart';
 import 'view_model/board_view_model.dart';
