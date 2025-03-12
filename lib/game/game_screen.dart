@@ -6,6 +6,7 @@ import 'package:mindtris/game/widget/board_widget.dart';
 import 'package:mindtris/game/widget/score_widget.dart';
 
 import 'model/shape.dart';
+import 'model/shape_color.dart';
 import 'view_model/board_view_model.dart';
 import 'widget/draggable_shape_widget.dart';
 
@@ -25,32 +26,32 @@ class _GameScreenState extends State<GameScreen> {
   final List<Shape> shapes = [
     Shape(
       type: ShapeType.I,
-      color: Colors.deepPurple,
+      color: ShapeColor.violet,
       blocks: [Point(0, 1), Point(1, 1), Point(2, 1), Point(0, 0), Point(1, 2)]
     ),
     Shape(
       type: ShapeType.T,
-      color: Colors.orange,
+      color: ShapeColor.orange,
       blocks: [Point(0, 0), Point(1, 0), Point(1, 1), Point(2, 1)],
     ),
     Shape(
       type: ShapeType.L,
-      color: Colors.purpleAccent,
+      color: ShapeColor.pink,
       blocks: [Point(0, 1), Point(1, 1), Point(2, 1), Point(1, 0), Point(1, 2)],
     ),
     Shape(
       type: ShapeType.L,
-      color: Colors.cyan,
+      color: ShapeColor.blue,
       blocks: [Point(0, 1), Point(1, 1), Point(2, 1), Point(1, 0), Point(1, 2)],
     ),
     Shape(
       type: ShapeType.T,
-      color: Colors.brown,
+      color: ShapeColor.black,
       blocks: [Point(0, 0), Point(0, 1), Point(0, 2), Point(1, 2), Point(2, 2)],
     ),
     Shape(
       type: ShapeType.T,
-      color: Colors.deepPurple,
+      color: ShapeColor.violet,
       blocks: [Point(0,0), Point(0, 1), Point(1, 1), Point(2, 1), Point(3, 1), Point(3, 0)],
     ),
   ];

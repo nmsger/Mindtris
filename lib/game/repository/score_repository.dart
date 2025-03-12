@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../model/score.dart';
 import '../model/shape.dart';
+import '../model/shape_color.dart';
 import 'board_repository.dart';
 
 class ScoreRepository extends ChangeNotifier {
@@ -53,7 +54,7 @@ class ScoreRepository extends ChangeNotifier {
   void _calculateOrange() {
     final List<int> scores = [0, 3, 6, 10, 15, 20];
     int totalOrange = _boardRepository.placedShapes
-      .where((shape) => shape.shape.color == Colors.orange).length;
+      .where((shape) => shape.shape.color == ShapeColor.orange).length;
     if (totalOrange >= scores.length) {
       totalOrange = scores.length - 1;
     }
@@ -64,13 +65,13 @@ class ScoreRepository extends ChangeNotifier {
     final int scoreMultiplier = 2;
     int total = 0;
     List<PlacedShape> violetShapes = _boardRepository.placedShapes
-      .where((s) => s.shape.color == Colors.deepPurple).toList();
+      .where((s) => s.shape.color == ShapeColor.violet).toList();
 
     for (PlacedShape ps in violetShapes) {
       for (Point block in ps.shape.blocks) {
         Point gridPosition = _boardRepository.getGridPosition(block, ps.point);
-        List<Color> adjColors = _boardRepository.getAdjacentCells(gridPosition);
-        if (adjColors.contains(Colors.orange)) {
+        List<ShapeColor> adjColors = _boardRepository.getAdjacentCells(gridPosition);
+        if (adjColors.contains(ShapeColor.orange)) {
           total++;
         }
       }
@@ -81,7 +82,7 @@ class ScoreRepository extends ChangeNotifier {
   void _calculatePink() {
     int total = 0;
     List<PlacedShape> pinkShapes = _boardRepository.placedShapes
-      .where((s) => s.shape.color == Colors.purpleAccent).toList();
+      .where((s) => s.shape.color == ShapeColor.pink).toList();
     for (PlacedShape pinkShape in pinkShapes) {
       // -1 to discount the shape itself
       int sameType = _boardRepository.placedShapes.where((s) => s.shape.type == pinkShape.shape.type).length - 1;
@@ -96,7 +97,7 @@ class ScoreRepository extends ChangeNotifier {
 
     for (var section in _boardRepository.boardType.sections) {
       for (var s in section.gridCoordinates) {
-        if (_boardRepository.boardGrid[s.y][s.x] == Colors.cyan) {
+        if (_boardRepository.boardGrid[s.y][s.x] == ShapeColor.blue) {
           countPerSection++;
           break;
         }
@@ -116,7 +117,7 @@ class ScoreRepository extends ChangeNotifier {
     for (var section in _boardRepository.boardType.sections) {
       bool isFilled = true;
       for (var s in section.gridCoordinates) {
-        if (_boardRepository.boardGrid[s.y][s.x] == Colors.transparent) {
+        if (_boardRepository.boardGrid[s.y][s.x] == ShapeColor.empty) {
           isFilled = false;
         }
       }
@@ -133,7 +134,7 @@ class ScoreRepository extends ChangeNotifier {
     for (var section in _boardRepository.boardType.sections) {
       int sectionEmpty = 0;
       for (var s in section.gridCoordinates) {
-        if (_boardRepository.boardGrid[s.y][s.x] == Colors.transparent) {
+        if (_boardRepository.boardGrid[s.y][s.x] == ShapeColor.empty) {
           sectionEmpty++;
         }
       }

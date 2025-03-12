@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mindtris/game/model/shape_color.dart';
 
 enum ShapeType { I, O, T, L }
 
@@ -31,7 +32,7 @@ class Point {
 
 class Shape {
   final ShapeType type;
-  final Color color;
+  final ShapeColor color;
   final List<Point> blocks;
 
   Shape({required this.type, required this.color, required this.blocks});

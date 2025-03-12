@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:mindtris/game/model/shape_color.dart';
 
 import '../model/shape.dart';
 
@@ -59,7 +60,7 @@ class ShapeWidget extends StatelessWidget {
         height: cellSize,
         decoration: BoxDecoration(
           color: isValid
-              ? shape.color
+              ? shape.color.toColor()
               : Colors.red.withValues(alpha: 0.7),
           border: Border.all(
             color: isValid

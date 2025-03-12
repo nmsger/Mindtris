@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../model/board.dart';
 import '../model/shape.dart';
+import '../model/shape_color.dart';
 
 
 class BoardRepository extends ChangeNotifier {
   final int boardSize;
   final double cellSize;
-  final List<List<Color>> boardGrid;
+  final List<List<ShapeColor>> boardGrid;
   final List<PlacedShape> placedShapes = [];
   final BoardType boardType = boardTypes[0];
 
@@ -17,7 +18,7 @@ class BoardRepository extends ChangeNotifier {
     required this.cellSize,
   }) : boardGrid = List.generate(
       boardSize,
-          (_) => List.generate(boardSize, (_) => Colors.transparent)
+          (_) => List.generate(boardSize, (_) => ShapeColor.empty)
   );
 
   bool isWithinGrid(Point point) {
@@ -26,7 +27,7 @@ class BoardRepository extends ChangeNotifier {
   }
 
   bool _isCellOccupied(Point point) {
-    return boardGrid[point.y][point.x] != Colors.transparent;
+    return boardGrid[point.y][point.x] != ShapeColor.empty;
   }
 
   Point getGridPosition(Point shapePos, Point anchorPoint) {
@@ -35,14 +36,14 @@ class BoardRepository extends ChangeNotifier {
     return Point(x, y);
   }
 
-  List<Color> getAdjacentCells(Point point) {
+  List<ShapeColor> getAdjacentCells(Point point) {
     final directions = [
       (-1, 0),  // up
       (0, 1),   // right
       (1, 0),   // down
       (0, -1),  // left
     ];
-    List<Color> results = [];
+    List<ShapeColor> results = [];
     for (var (dy, dx) in directions) {
       Point gridPosition = Point(point.x + dx, point.y + dy);
       if (!isWithinGrid(gridPosition)) {
@@ -65,13 +66,13 @@ class BoardRepository extends ChangeNotifier {
         return false;
       }
 
-      List<Color> adjacentColors = getAdjacentCells(gridPosition);
+      List<ShapeColor> adjacentColors = getAdjacentCells(gridPosition);
       if (adjacentColors.contains(shape.color)) {
         return false;
       }
 
       if (placedShapes.isNotEmpty &&
-        adjacentColors.any((color) => color != Colors.transparent)) {
+        adjacentColors.any((color) => color != ShapeColor.empty)) {
         hasAdjacentNeighbor = true;
       }
     }
