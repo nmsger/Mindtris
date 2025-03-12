@@ -1,5 +1,5 @@
 
-import 'Shape.dart';
+import 'shape.dart';
 
 class Section {
   final Point anchor;
