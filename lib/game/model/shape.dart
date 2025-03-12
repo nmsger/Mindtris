@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-enum ShapeType { I, O, T }
+enum ShapeType { I, O, T, L }
 
 class Point {
   final int x;

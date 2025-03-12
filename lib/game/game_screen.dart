@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:mindtris/config/constants.dart';
+import 'package:mindtris/game/view_model/score_view_model.dart';
 import 'package:mindtris/game/widget/board_widget.dart';
+import 'package:mindtris/game/widget/score_widget.dart';
 
 import 'model/shape.dart';
 import 'view_model/board_view_model.dart';
@@ -18,20 +20,26 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   final double cellSize = BoardCfg.boardCellSize;
   final BoardViewModel boardViewModel = BoardViewModel();
+  final ScoreViewModel scoreViewModel = ScoreViewModel();
 
   final List<Shape> shapes = [
     Shape(
       type: ShapeType.I,
-      color: Colors.green,
+      color: Colors.deepPurple,
       blocks: [Point(0, 1), Point(1, 1), Point(2, 1), Point(0, 0), Point(1, 2)]
     ),
     Shape(
       type: ShapeType.T,
-      color: Colors.pink,
+      color: Colors.orange,
       blocks: [Point(0, 0), Point(1, 0), Point(1, 1), Point(2, 1)],
     ),
     Shape(
-      type: ShapeType.T,
+      type: ShapeType.L,
+      color: Colors.purpleAccent,
+      blocks: [Point(0, 1), Point(1, 1), Point(2, 1), Point(1, 0), Point(1, 2)],
+    ),
+    Shape(
+      type: ShapeType.L,
       color: Colors.cyan,
       blocks: [Point(0, 1), Point(1, 1), Point(2, 1), Point(1, 0), Point(1, 2)],
     ),
@@ -62,6 +70,7 @@ class _GameScreenState extends State<GameScreen> {
       ),
       body: Column(
         children: [
+          ScoreWidget(viewModel: scoreViewModel,),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: BoardWidget(viewModel: boardViewModel),

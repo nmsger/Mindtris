@@ -1,16 +1,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mindtris/config/constants.dart';
-import 'package:mindtris/game/repository/board_repository.dart';
 
+import 'config/constants.dart';
 import 'game/game_screen.dart';
+import 'game/repository/board_repository.dart';
+import 'game/repository/score_repository.dart';
 
 
 final getIt = GetIt.instance;
 
 void setup() {
-  getIt.registerSingleton(BoardRepository(boardSize: BoardCfg.boardSize, cellSize: BoardCfg.boardCellSize));
+  BoardRepository boardRepository = BoardRepository(
+      boardSize: BoardCfg.boardSize,
+      cellSize: BoardCfg.boardCellSize
+  );
+  getIt.registerSingleton(boardRepository);
+  ScoreRepository scoreRepository = ScoreRepository();
+  getIt.registerSingleton<ScoreRepository>(scoreRepository);
 }
 
 void main() {

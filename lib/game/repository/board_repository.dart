@@ -5,7 +5,7 @@ import '../model/board.dart';
 import '../model/shape.dart';
 
 
-class BoardRepository {
+class BoardRepository extends ChangeNotifier {
   final int boardSize;
   final double cellSize;
   final List<List<Color>> boardGrid;
@@ -29,13 +29,13 @@ class BoardRepository {
     return boardGrid[point.y][point.x] != Colors.transparent;
   }
 
-  Point _getGridPosition(Point shapePos, Point anchorPoint) {
+  Point getGridPosition(Point shapePos, Point anchorPoint) {
     int x = shapePos.x + anchorPoint.x;
     int y = shapePos.y + anchorPoint.y;
     return Point(x, y);
   }
 
-  List<Color> _getAdjacentCells(Point point) {
+  List<Color> getAdjacentCells(Point point) {
     final directions = [
       (-1, 0),  // up
       (0, 1),   // right
@@ -56,7 +56,7 @@ class BoardRepository {
   bool canPlaceShape(Shape shape, Point anchorPoint) {
     bool hasAdjacentNeighbor = false;
     for (Point block in shape.blocks) {
-      Point gridPosition = _getGridPosition(block, anchorPoint);
+      Point gridPosition = getGridPosition(block, anchorPoint);
 
       if (!isWithinGrid(gridPosition)) {
         return false;
@@ -65,7 +65,7 @@ class BoardRepository {
         return false;
       }
 
-      List<Color> adjacentColors = _getAdjacentCells(gridPosition);
+      List<Color> adjacentColors = getAdjacentCells(gridPosition);
       if (adjacentColors.contains(shape.color)) {
         return false;
       }
@@ -87,13 +87,14 @@ class BoardRepository {
     }
 
     for (Point block in shape.blocks) {
-      Point gridPosition = _getGridPosition(block, anchorPoint);
+      Point gridPosition = getGridPosition(block, anchorPoint);
       boardGrid[gridPosition.y][gridPosition.x] = shape.color;
     }
 
     placedShapes.add(PlacedShape(
         shape: shape.copyWith(),
         point: anchorPoint
-      ));    
+      ));
+    notifyListeners();
   }
 }

@@ -15,11 +15,15 @@ class Section {
   static List<Point> _init(Point anchor, int width, int height) {
     List<Point> coordinates = [];
     for (int y = anchor.y; y < anchor.y + height; y++) {
-      for (int x = anchor.y; x < anchor.x + width; x++) {
+      for (int x = anchor.x; x < anchor.x + width; x++) {
         coordinates.add(Point(x, y));
       }
     }
     return coordinates;
+  }
+  @override
+  String toString() {
+    return "Section<$anchor W$width H$height $gridCoordinates";
   }
 }
 
