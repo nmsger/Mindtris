@@ -9,6 +9,7 @@ import 'shape_widget.dart';
 class DraggableShapeWidget extends StatelessWidget {
   final Shape shape;
   final double cellSize;
+  final double feedbackCellSize;
   final bool isValid;
   final Function(Shape) onRotate;
 
@@ -18,10 +19,10 @@ class DraggableShapeWidget extends StatelessWidget {
     required this.cellSize,
     this.isValid = true,
     required this.onRotate,
+    required this.feedbackCellSize,
   });
 
   void _handleTap() {
-    print("_handleTap");
     onRotate(shape.rotate());
   }
 
@@ -37,36 +38,13 @@ class DraggableShapeWidget extends StatelessWidget {
 
     return Draggable<Shape>(
       data: shape,
-      feedback: ShapeWidget(shape: shape, cellSize: cellSize, opacity: 0.7),
+      feedback: ShapeWidget(shape: shape, cellSize: feedbackCellSize, opacity: 0.7),
       dragAnchorStrategy: (Draggable<Object> draggable, BuildContext context, Offset position) => Offset(50, 50),
       // dragAnchorStrategy: pointerDragAnchorStrategy,
       childWhenDragging: ShapeWidget(shape: shape, cellSize: cellSize, opacity: 0.3),
       child: GestureDetector(
           onTap: _handleTap,
           child:  ShapeWidget(shape: shape, cellSize: cellSize, opacity: 1.0),
-      ),
-    );
-  }
-
-
-  Widget _buildShapeBlock(Point block) {
-    return Positioned(
-      left: block.x * cellSize,
-      top: block.y * cellSize,
-      child: Container(
-        width: cellSize,
-        height: cellSize,
-        decoration: BoxDecoration(
-          color: isValid
-              ? shape.color.toColor()
-              : Colors.red.withValues(alpha: 0.7),
-          border: Border.all(
-            color: isValid
-                ? Colors.white
-                : Colors.red.shade900,
-            width: 1,
-          ),
-        ),
       ),
     );
   }

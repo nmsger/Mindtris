@@ -35,9 +35,6 @@ class ScoreRepository extends ChangeNotifier {
   }
 
   void _updateScore() {
-    print("Scoring now");
-    Stopwatch stopwatch = Stopwatch()..start();
-
     _calculateOrange();
     _calculateViolet();
     _calculatePink();
@@ -46,9 +43,6 @@ class ScoreRepository extends ChangeNotifier {
     _calculateSection();
 
     notifyListeners();
-
-    stopwatch.stop();
-    print('Execution time: ${stopwatch.elapsedMilliseconds} milliseconds');
   }
 
   void _calculateOrange() {
@@ -92,7 +86,7 @@ class ScoreRepository extends ChangeNotifier {
   }
 
   void _calculateBlue() {
-    final List<int> scores = [0, 4, 7, 12, 16];
+    final List<int> scores = [-16, -12, -7, -3, 0];
     int countPerSection = 0;
 
     for (var section in _boardRepository.boardType.sections) {

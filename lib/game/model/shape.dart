@@ -1,10 +1,9 @@
 
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:mindtris/game/model/shape_color.dart';
 
-enum ShapeType { I, O, T, L }
+enum ShapeType { A, B, C, D, E, F, G, H, I, J, K, L, M }
 
 class Point {
   final int x;
@@ -36,6 +35,14 @@ class Shape {
   final List<Point> blocks;
 
   Shape({required this.type, required this.color, required this.blocks});
+
+  Shape withColor(ShapeColor newColor) {
+    return Shape(
+      type: type,
+      color: newColor,
+      blocks: List.from(blocks),
+    );
+  }
 
   Shape copyWith() {
     return Shape(
@@ -84,5 +91,16 @@ class PlacedShape {
   @override
   String toString() {
     return "PlacedShape<${shape.type} $point>";
+  }
+}
+
+class ShapeSelection {
+  final Shape shape;
+  final List<ShapeColor> availableColors;
+
+  ShapeSelection({required this.shape, required this.availableColors});
+
+  ShapeSelection copyWith() {
+    return ShapeSelection(shape: shape.copyWith(), availableColors: List.from(availableColors));
   }
 }

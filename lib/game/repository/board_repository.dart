@@ -9,25 +9,28 @@ import '../model/shape_color.dart';
 class BoardRepository extends ChangeNotifier {
   final int boardSize;
   final double cellSize;
-  final List<List<ShapeColor>> boardGrid;
-  final List<PlacedShape> placedShapes = [];
+  final List<List<ShapeColor>> _boardGrid;
+  final List<PlacedShape> _placedShapes = [];
   final BoardType boardType = boardTypes[0];
 
   BoardRepository({
     required this.boardSize,
     required this.cellSize,
-  }) : boardGrid = List.generate(
+  }) : _boardGrid = List.generate(
       boardSize,
           (_) => List.generate(boardSize, (_) => ShapeColor.empty)
   );
 
+  List<PlacedShape> get placedShapes => List.unmodifiable(_placedShapes);
+  List<List<ShapeColor>> get boardGrid => List.unmodifiable(_boardGrid);
+  
   bool isWithinGrid(Point point) {
     return point.x >= 0 && point.x < boardSize
         && point.y >= 0 && point.y < boardSize;
   }
 
   bool _isCellOccupied(Point point) {
-    return boardGrid[point.y][point.x] != ShapeColor.empty;
+    return _boardGrid[point.y][point.x] != ShapeColor.empty;
   }
 
   Point getGridPosition(Point shapePos, Point anchorPoint) {
@@ -49,11 +52,11 @@ class BoardRepository extends ChangeNotifier {
       if (!isWithinGrid(gridPosition)) {
         continue;
       }
-      results.add(boardGrid[gridPosition.y][gridPosition.x]);
+      results.add(_boardGrid[gridPosition.y][gridPosition.x]);
     }
     return results;
   }
-
+  
   bool canPlaceShape(Shape shape, Point anchorPoint) {
     bool hasAdjacentNeighbor = false;
     for (Point block in shape.blocks) {
@@ -71,12 +74,12 @@ class BoardRepository extends ChangeNotifier {
         return false;
       }
 
-      if (placedShapes.isNotEmpty &&
+      if (_placedShapes.isNotEmpty &&
         adjacentColors.any((color) => color != ShapeColor.empty)) {
         hasAdjacentNeighbor = true;
       }
     }
-    if (placedShapes.isNotEmpty && !hasAdjacentNeighbor) {
+    if (_placedShapes.isNotEmpty && !hasAdjacentNeighbor) {
       return false;
     }
     return true;
@@ -89,10 +92,10 @@ class BoardRepository extends ChangeNotifier {
 
     for (Point block in shape.blocks) {
       Point gridPosition = getGridPosition(block, anchorPoint);
-      boardGrid[gridPosition.y][gridPosition.x] = shape.color;
+      _boardGrid[gridPosition.y][gridPosition.x] = shape.color;
     }
 
-    placedShapes.add(PlacedShape(
+    _placedShapes.add(PlacedShape(
         shape: shape.copyWith(),
         point: anchorPoint
       ));

@@ -4,13 +4,18 @@ Mindtris game
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Roadmap:
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [X] Draw Board + Shapes
+- [X] Drag'n Drop support for Shapes
+- [X] Shape placement rules
+- [X] Basic scoring
+- [ ] Turn based Shape selection 
+- [ ] Game End Screen + Restart 
+- [ ] Board contains disabled Shapes
+- [ ] Scoring goals
+- [ ] Money
+- [ ] Instruction widget
+- [ ] High Score/board state across restarts/reloads
+- [ ] Bug Fixes
+- [ ] Unit tests

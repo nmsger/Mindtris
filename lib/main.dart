@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mindtris/game/repository/shape_repository.dart';
 
 import 'config/constants.dart';
 import 'game/game_screen.dart';
@@ -18,6 +19,8 @@ void setup() {
   getIt.registerSingleton(boardRepository);
   ScoreRepository scoreRepository = ScoreRepository();
   getIt.registerSingleton<ScoreRepository>(scoreRepository);
+  ShapeRepository shapeRepository = ShapeRepository();
+  getIt.registerSingleton<ShapeRepository>(shapeRepository);
 }
 
 void main() {
