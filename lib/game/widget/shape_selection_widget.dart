@@ -67,7 +67,8 @@ class ShapeSelectionWidget extends StatelessWidget {
           shape: shape,
           cellSize: 20,
           feedbackCellSize: 40,
-          onRotate: (rotatedShape) => (viewModel.onRotatedShape(rotatedShape)),
+          onRotate: (rotatedShape) => (viewModel.onShapeChange(rotatedShape)),
+          onMirror: (mirroredShape) => viewModel.onShapeChange(mirroredShape),
         ),
       ),
     );

@@ -18,7 +18,7 @@ class ShapeSelectionViewModel extends ChangeNotifier {
 
   List<ShapeSelection> get selection => _shapeRepository.selection;
 
-  void onRotatedShape(Shape shape) {
+  void onShapeChange(Shape shape) {
     _shapeRepository.updateShape(shape);
     notifyListeners();
   }

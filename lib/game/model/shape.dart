@@ -52,6 +52,23 @@ class Shape {
     );
   }
 
+  Shape mirror() {
+    int minX = blocks.map((b) => b.x).reduce(min);
+    int maxX = blocks.map((b) => b.x).reduce(max);
+    int width = maxX - minX;
+
+    // mirror points by reflecting across vertical axis
+    List<Point> mirroredBlocks = blocks.map((b) =>
+        Point(width - (b.x - minX) + minX, b.y)
+    ).toList();
+
+    return Shape(
+      type: type,
+      color: color,
+      blocks: mirroredBlocks,
+    );
+  }
+
   Shape rotate() {
     int minY = blocks.map((b) => b.y).reduce(min);
     int maxY = blocks.map((b) => b.y).reduce(max);

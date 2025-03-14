@@ -12,6 +12,7 @@ class DraggableShapeWidget extends StatelessWidget {
   final double feedbackCellSize;
   final bool isValid;
   final Function(Shape) onRotate;
+  final Function(Shape) onMirror;
 
   const DraggableShapeWidget({
     super.key,
@@ -19,11 +20,15 @@ class DraggableShapeWidget extends StatelessWidget {
     required this.cellSize,
     this.isValid = true,
     required this.onRotate,
-    required this.feedbackCellSize,
+    required this.feedbackCellSize, required this.onMirror,
   });
 
   void _handleTap() {
     onRotate(shape.rotate());
+  }
+
+  void _handleDoubleTap() {
+    onMirror(shape.mirror());
   }
 
   @override
@@ -44,6 +49,7 @@ class DraggableShapeWidget extends StatelessWidget {
       childWhenDragging: ShapeWidget(shape: shape, cellSize: cellSize, opacity: 0.3),
       child: GestureDetector(
           onTap: _handleTap,
+          onDoubleTap: _handleDoubleTap,
           child:  ShapeWidget(shape: shape, cellSize: cellSize, opacity: 1.0),
       ),
     );
