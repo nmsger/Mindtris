@@ -85,9 +85,9 @@ class BoardRepository extends ChangeNotifier {
     return true;
   }
 
-  void placeShape(Shape shape, Point anchorPoint) {
+  bool placeShape(Shape shape, Point anchorPoint) {
     if (!canPlaceShape(shape, anchorPoint)) {
-      return;
+      return false;
     }
 
     for (Point block in shape.blocks) {
@@ -100,5 +100,6 @@ class BoardRepository extends ChangeNotifier {
         point: anchorPoint
       ));
     notifyListeners();
+    return true;
   }
 }

@@ -28,4 +28,9 @@ class ShapeSelectionViewModel extends ChangeNotifier {
     _shapeRepository.updateShape(newShape);
     notifyListeners();
   }
+
+  void nextTurn() {
+    _shapeRepository.nextTurn();
+    notifyListeners();
+  }
 }

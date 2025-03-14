@@ -9,8 +9,11 @@ import 'shape_widget.dart';
 
 class BoardWidget extends StatelessWidget {
   final BoardViewModel viewModel;
+  final Function(Shape shape, Point point) onPlacedShape;
 
-  const BoardWidget({super.key, required this.viewModel});
+  BoardWidget({super.key, required this.viewModel, required this.onPlacedShape}) {
+    viewModel.onPlacedShape = onPlacedShape;
+  }
 
   @override
   Widget build(BuildContext context) {

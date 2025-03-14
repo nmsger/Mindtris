@@ -9,6 +9,7 @@ import '../repository/board_repository.dart';
 class BoardViewModel extends ChangeNotifier {
   ShapePreview? preview;
   late BoardRepository boardRepository;
+  Function(Shape shape, Point point)? onPlacedShape;
 
   BoardViewModel({
     BoardRepository? boardRepository}) {
@@ -23,9 +24,14 @@ class BoardViewModel extends ChangeNotifier {
     if (preview == null) {
       return;
     }
-    boardRepository.placeShape(preview!.shape, preview!.point);
-    _resetPreview();
+    bool placed = boardRepository.placeShape(preview!.shape, preview!.point);
+
+    if (onPlacedShape != null && placed) {
+      onPlacedShape!(preview!.shape, preview!.point);
+    }
+
     notifyListeners();
+    _resetPreview();
   }
 
   void onDragLeave() {

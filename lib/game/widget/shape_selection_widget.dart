@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:mindtris/game/model/shape_color.dart';
+import 'package:mindtris/game/widget/shape_widget.dart';
 
 import '../model/shape.dart';
+import '../model/shape_color.dart';
 import '../view_model/shape_selection_view_model.dart';
 import 'color_picker_widget.dart';
 import 'draggable_shape_widget.dart';
@@ -21,7 +22,8 @@ class ShapeSelectionWidget extends StatelessWidget {
           children: [
             ...viewModel.selection.map((s) =>
               _buildShapeContainer(s)
-            )
+            ),
+            // ElevatedButton(onPressed: viewModel.nextTurn, child: Text("NEXT"))
           ],
         );
       },
@@ -41,7 +43,10 @@ class ShapeSelectionWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildDraggable(selection.shape),
+              selection.shape.color != ShapeColor.disabled
+                  ? _buildDraggable(selection.shape)
+                  : _buildNonDraggable(selection.shape),
+
               ColorPickerWidget(
                 shape: selection.shape,
                 availableColors: selection.availableColors,
@@ -68,33 +73,15 @@ class ShapeSelectionWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildColorPicker(List<ShapeColor> availableColors) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Wrap(
-          // mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(width: 1),
-            ...availableColors.expand((c) => [
-                _buildColorTouchable(c),
-                const SizedBox(width: 8),
-              ]),
-          ],
+  Widget _buildNonDraggable(Shape shape) {
+    return  Expanded(
+      child: Center(
+        child: ShapeWidget(
+          shape: shape,
+          cellSize: 20,
         ),
       ),
     );
   }
 
-  Widget _buildColorTouchable(ShapeColor color) {
-    return Container(
-      width: 22,
-      height: 22,
-      decoration: BoxDecoration(
-        color: color.toColor(),
-        shape: BoxShape.circle,
-      ),
-    );
-  }
 }

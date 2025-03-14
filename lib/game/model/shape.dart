@@ -25,7 +25,7 @@ class Point {
   @override
   String toString() {
     // TODO: implement toString
-    return "($x, $y)";
+    return "Point<$x, $y>";
   }
 }
 
@@ -67,6 +67,11 @@ class Shape {
       color: color,
       blocks: rotatedNormalizedBlocks,
     );
+  }
+
+  @override
+  String toString() {
+    return "Shape<$type, $color>";
   }
 }
 
