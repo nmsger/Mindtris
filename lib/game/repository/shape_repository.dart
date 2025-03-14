@@ -61,8 +61,8 @@ class ShapeRepository extends ChangeNotifier {
 
   void _init() {
     assert(_shapes.length >= randomSelectionSize+1);
-    // _shapes.removeLast();
-    // _shapes.shuffle();
+    _shapes.removeLast();
+    _shapes.shuffle();
     _currentTurn = _generateSelections(
       randomSelectionSize,
       (i) => _shapes[i],
