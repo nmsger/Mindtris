@@ -22,6 +22,8 @@ class ShapeRepository extends ChangeNotifier {
     _init();
   }
 
+  int get currentTurn => curIndex - randomSelectionSize + 1;
+  int get totalTurnNumber => _shapes.length - randomSelectionSize + 1;
   List<ShapeSelection> get selection => List.unmodifiable(_currentTurn);
 
   void updateShape(Shape shape) {

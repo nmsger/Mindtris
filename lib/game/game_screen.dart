@@ -57,6 +57,17 @@ class _GameScreenState extends State<GameScreen> {
                 children: [
                   AbilityWidget(viewModel: abilityViewModel,),
                   Spacer(),
+                  ListenableBuilder(
+                    listenable: selectionViewModel,
+                    builder: (BuildContext context, Widget? child) { 
+                      return Text(
+                        "Turn ${selectionViewModel.currentTurn}/${selectionViewModel.totalTurns}",
+                        style: TextStyle(fontSize: 18),
+                      );
+                    },
+
+                  ),
+                  Spacer(),
                   ScoreWidget(viewModel: scoreViewModel, dismissible: !gameEnd,),
                 ],
               ),
