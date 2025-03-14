@@ -11,6 +11,7 @@ class ShapeSelectionViewModel extends ChangeNotifier {
   final double cellSize = 40;
   final double feedbackCellSize = 20;
   late final ShapeRepository _shapeRepository;
+  bool gameEnd = false;
 
   ShapeSelectionViewModel({
   ShapeRepository? shapeRepository}) :
@@ -30,7 +31,7 @@ class ShapeSelectionViewModel extends ChangeNotifier {
   }
 
   void nextTurn() {
-    _shapeRepository.nextTurn();
+    gameEnd = _shapeRepository.nextTurn();
     notifyListeners();
   }
 }

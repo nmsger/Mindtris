@@ -18,7 +18,6 @@ class GameScreen extends StatefulWidget {
 
   @override
   _GameScreenState createState() => _GameScreenState();
-
 }
 
 class _GameScreenState extends State<GameScreen> {
@@ -27,11 +26,19 @@ class _GameScreenState extends State<GameScreen> {
   final ScoreViewModel scoreViewModel = ScoreViewModel();
   final ShapeSelectionViewModel selectionViewModel = ShapeSelectionViewModel();
   final AbilityViewModel abilityViewModel = AbilityViewModel();
+  bool gameEnd = false;
 
+  // ToDo - Refactor to decouple logic from UI
   void onPlacedShape(Shape shape) {
     abilityViewModel.onShapePlacement(shape);
     if (shape.color != ShapeColor.black) {
       selectionViewModel.nextTurn();
+    }
+    if (selectionViewModel.gameEnd) {
+      setState(() {
+          gameEnd = true;
+        }
+      );
     }
   }
 
@@ -50,7 +57,7 @@ class _GameScreenState extends State<GameScreen> {
                 children: [
                   AbilityWidget(viewModel: abilityViewModel,),
                   Spacer(),
-                  ScoreWidget(viewModel: scoreViewModel,),
+                  ScoreWidget(viewModel: scoreViewModel, dismissible: !gameEnd,),
                 ],
               ),
             ),

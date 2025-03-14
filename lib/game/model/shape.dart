@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:mindtris/game/model/shape_color.dart';
 
-enum ShapeType { A, B, C, D, E, F, G, H, I, J, K, L, M, Z }
+enum ShapeType { A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, S, X, Z }
 
 class Point {
   final int x;

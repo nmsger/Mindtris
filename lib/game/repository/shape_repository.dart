@@ -1,17 +1,19 @@
 
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 import '../model/shape.dart';
 import '../model/shape_color.dart';
 import '../model/shapes.dart';
 
-class ShapeRepository {
+class ShapeRepository extends ChangeNotifier {
   final List<Shape> _shapes;
   late List<ShapeSelection> _currentTurn;
   final int randomSelectionSize = 5;
   int curIndex = 0;
   List<ShapeColor> allColors = [ShapeColor.orange, ShapeColor.blue, ShapeColor.pink, ShapeColor.violet, ShapeColor.green];
-  final Shape baseShape = Shape(type: ShapeType.M,
+  final Shape baseShape = Shape(type: ShapeType.X,
     color: ShapeColor.disabled,
     blocks: [Point(0, 0), Point(0, 1)]);
 
@@ -30,10 +32,11 @@ class ShapeRepository {
     _currentTurn[index] = newShape;
   }
 
-  void nextTurn() {
+  bool nextTurn() {
     if (curIndex == _shapes.length) {
-      print("DONE");
-      return;
+      _currentTurn = _disableAll();
+      notifyListeners();
+      return true;
     }
     _currentTurn = _generateSelections(
       randomSelectionSize,
@@ -41,10 +44,25 @@ class ShapeRepository {
     );
 
     curIndex++;
+    return false;
+  }
+
+  List<ShapeSelection> _disableAll() {
+    List<ShapeSelection> selection = [];
+    for (var s in _currentTurn) {
+      ShapeSelection newShape = ShapeSelection(
+          shape: s.shape.withColor(ShapeColor.disabled),
+          availableColors: []
+      );
+      selection.add(newShape);
+    }
+    return selection;
   }
 
   void _init() {
-    assert(_shapes.length >= randomSelectionSize);
+    assert(_shapes.length >= randomSelectionSize+1);
+    // _shapes.removeLast();
+    // _shapes.shuffle();
     _currentTurn = _generateSelections(
       randomSelectionSize,
       (i) => _shapes[i],

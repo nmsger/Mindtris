@@ -7,16 +7,22 @@ import '../model/score.dart';
 import '../view_model/score_view_model.dart';
 
 class ScoreWidget extends StatelessWidget {
-  final ScoreViewModel viewModel;
-  const ScoreWidget({super.key, required this.viewModel});
+    final ScoreViewModel viewModel;
+    final bool dismissible;
+    const ScoreWidget({super.key, required this.viewModel, required this.dismissible});
 
-  @override
-  Widget build(BuildContext context) {
+    @override
+    Widget build(BuildContext context) {
+      if (!dismissible) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _showScoreDialog(context, dismissible);
+        });
+      }
     return Card(
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
-        onTap: () => _showScoreDialog(context),
+        onTap: () => _showScoreDialog(context, dismissible),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Column(
@@ -34,10 +40,10 @@ class ScoreWidget extends StatelessWidget {
     );
   }
 
-  Future _showScoreDialog(BuildContext context) async {
+  Future _showScoreDialog(BuildContext context, bool dismissible) async {
     return showDialog<String>(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: dismissible,
       builder: (BuildContext context) => _buildScoreDialog(context),
     );
   }

@@ -7,7 +7,7 @@ import '../repository/score_repository.dart';
 
 class ScoreViewModel extends ChangeNotifier {
 
-  late ScoreRepository _scoreRepository;
+  late final ScoreRepository _scoreRepository;
 
   ScoreViewModel({ScoreRepository? scoreRepository})
     : _scoreRepository = scoreRepository ?? getIt.get<ScoreRepository>() {
