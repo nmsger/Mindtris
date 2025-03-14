@@ -10,9 +10,9 @@ Roadmap:
 - [X] Drag'n Drop support for Shapes
 - [X] Shape placement rules
 - [X] Basic scoring
-- [ ] Turn based Shape selection 
+- [X] Turn based Shape selection 
 - [ ] Game End Screen + Restart 
-- [ ] Board contains disabled Shapes
+- [X] Board contains disabled Shapes
 - [ ] Scoring goals
 - [ ] Money
 - [ ] Instruction widget

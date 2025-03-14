@@ -9,24 +9,33 @@ import '../model/shape_color.dart';
 class BoardRepository extends ChangeNotifier {
   final int boardSize;
   final double cellSize;
-  final List<List<ShapeColor>> _boardGrid;
+  late final List<List<ShapeColor>> _boardGrid;
   final List<PlacedShape> _placedShapes = [];
   final BoardType boardType = boardTypes[0];
 
   BoardRepository({
     required this.boardSize,
     required this.cellSize,
-  }) : _boardGrid = List.generate(
+  }) {
+    _init();
+  }
+
+  void _init() {
+    _boardGrid = List.generate(
       boardSize,
-          (_) => List.generate(boardSize, (_) => ShapeColor.empty)
-  );
+      (_) => List.generate(boardSize, (_) => ShapeColor.empty));
+    for (var placedShape in boardType.distractorShapes) {
+      print("place");
+      print(placeShape(placedShape.shape, placedShape.point));
+    }
+  }
 
   List<PlacedShape> get placedShapes => List.unmodifiable(_placedShapes);
   List<List<ShapeColor>> get boardGrid => List.unmodifiable(_boardGrid);
-  
+
   bool isWithinGrid(Point point) {
     return point.x >= 0 && point.x < boardSize
-        && point.y >= 0 && point.y < boardSize;
+      && point.y >= 0 && point.y < boardSize;
   }
 
   bool _isCellOccupied(Point point) {
@@ -56,7 +65,7 @@ class BoardRepository extends ChangeNotifier {
     }
     return results;
   }
-  
+
   bool canPlaceShape(Shape shape, Point anchorPoint) {
     bool hasAdjacentNeighbor = false;
     for (Point block in shape.blocks) {
@@ -75,11 +84,11 @@ class BoardRepository extends ChangeNotifier {
       }
 
       if (_placedShapes.isNotEmpty &&
-        adjacentColors.any((color) => color != ShapeColor.empty)) {
+        adjacentColors.any((color) => color != ShapeColor.empty && color != ShapeColor.disabled)) {
         hasAdjacentNeighbor = true;
       }
     }
-    if (_placedShapes.isNotEmpty && !hasAdjacentNeighbor) {
+    if (_placedShapes.length >= boardType.distractorShapes.length+1 && !hasAdjacentNeighbor) {
       return false;
     }
     return true;
