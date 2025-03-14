@@ -25,8 +25,7 @@ class BoardRepository extends ChangeNotifier {
       boardSize,
       (_) => List.generate(boardSize, (_) => ShapeColor.empty));
     for (var placedShape in boardType.distractorShapes) {
-      print("place");
-      print(placeShape(placedShape.shape, placedShape.point));
+      placeShape(placedShape.shape, placedShape.point);
     }
   }
 

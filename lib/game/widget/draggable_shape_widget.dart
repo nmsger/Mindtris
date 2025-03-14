@@ -44,8 +44,7 @@ class DraggableShapeWidget extends StatelessWidget {
     return Draggable<Shape>(
       data: shape,
       feedback: ShapeWidget(shape: shape, cellSize: feedbackCellSize, opacity: 0.7),
-      dragAnchorStrategy: (Draggable<Object> draggable, BuildContext context, Offset position) => Offset(50, 50),
-      // dragAnchorStrategy: pointerDragAnchorStrategy,
+      dragAnchorStrategy: (Draggable<Object> draggable, BuildContext context, Offset position) => Offset(25, 25),
       childWhenDragging: ShapeWidget(shape: shape, cellSize: cellSize, opacity: 0.3),
       child: GestureDetector(
           onTap: _handleTap,

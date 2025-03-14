@@ -10,7 +10,7 @@ class ShapeRepository {
   late List<ShapeSelection> _currentTurn;
   final int randomSelectionSize = 5;
   int curIndex = 0;
-  List<ShapeColor> allColors = [ShapeColor.orange, ShapeColor.blue, ShapeColor.pink, ShapeColor.violet];
+  List<ShapeColor> allColors = [ShapeColor.orange, ShapeColor.blue, ShapeColor.pink, ShapeColor.violet, ShapeColor.green];
   final Shape baseShape = Shape(type: ShapeType.M,
     color: ShapeColor.disabled,
     blocks: [Point(0, 0), Point(0, 1)]);

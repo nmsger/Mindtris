@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-enum ShapeColor { orange, violet, pink, blue, black, empty, disabled }
+enum ShapeColor { orange, violet, pink, blue, black, green, empty, disabled }
 
 extension ShapeColorExtension on ShapeColor {
   Color toColor() {
@@ -20,6 +20,8 @@ extension ShapeColorExtension on ShapeColor {
         return Colors.transparent;
       case ShapeColor.disabled:
         return Colors.grey;
+      case ShapeColor.green:
+        return Colors.green;
     }
   }
 }

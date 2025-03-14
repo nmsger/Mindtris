@@ -13,8 +13,9 @@ Roadmap:
 - [X] Turn based Shape selection 
 - [ ] Game End Screen + Restart 
 - [X] Board contains disabled Shapes
+- [X] Shape mirroring
 - [ ] Scoring goals
-- [ ] Money
+- [X] Money
 - [ ] Instruction widget
 - [ ] High Score/board state across restarts/reloads
 - [ ] Bug Fixes

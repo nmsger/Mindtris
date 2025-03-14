@@ -1,11 +1,14 @@
 
 import 'package:flutter/material.dart';
+import 'package:mindtris/game/model/shape_color.dart';
+import 'package:mindtris/game/view_model/ability_view_model.dart';
 
 import '../config/constants.dart';
 import 'model/shape.dart';
 import 'view_model/board_view_model.dart';
 import 'view_model/score_view_model.dart';
 import 'view_model/shape_selection_view_model.dart';
+import 'widget/ability_widget.dart';
 import 'widget/board_widget.dart';
 import 'widget/score_widget.dart';
 import 'widget/shape_selection_widget.dart';
@@ -23,9 +26,13 @@ class _GameScreenState extends State<GameScreen> {
   final BoardViewModel boardViewModel = BoardViewModel();
   final ScoreViewModel scoreViewModel = ScoreViewModel();
   final ShapeSelectionViewModel selectionViewModel = ShapeSelectionViewModel();
+  final AbilityViewModel abilityViewModel = AbilityViewModel();
 
-  void onPlacedShape() {
-    selectionViewModel.nextTurn();
+  void onPlacedShape(Shape shape) {
+    abilityViewModel.onShapePlacement(shape);
+    if (shape.color != ShapeColor.black) {
+      selectionViewModel.nextTurn();
+    }
   }
 
   @override
@@ -37,10 +44,19 @@ class _GameScreenState extends State<GameScreen> {
       body: Center(
         child: Column(
           children: [
-            ScoreWidget(viewModel: scoreViewModel,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Row(
+                children: [
+                  AbilityWidget(viewModel: abilityViewModel,),
+                  Spacer(),
+                  ScoreWidget(viewModel: scoreViewModel,),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: BoardWidget(viewModel: boardViewModel, onPlacedShape: (Shape shape, Point point) => onPlacedShape(), ),
+              child: BoardWidget(viewModel: boardViewModel, onPlacedShape: (Shape shape, Point point) => onPlacedShape(shape), ),
             ),
             ShapeSelectionWidget(viewModel: selectionViewModel,),
           ],
